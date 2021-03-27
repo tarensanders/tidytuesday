@@ -3,6 +3,7 @@ library(lubridate)
 library(mclust)
 library(maps)
 library(gganimate)
+library(here)
 
 
 # Read and join data
@@ -93,11 +94,18 @@ p <- ggplot(un_world, aes(x = long, y = lat)) +
   )) 
 
 p_anim <- p +
-  transition_time(decade) +
-  labs(
-    title = "UN Voting Clusters",
-    subtitle = "Decade: {frame_time}",
-    caption = "@TarenSanders"
-  )
+  transition_states(
+    decade,
+    transition_length = 2,
+    state_length = 3,
+    wrap = FALSE
+  ) +
+  labs(title = "UN Voting Clusters",
+       subtitle = "Decade: {closest_state}",
+       caption = "@TarenSanders")
 
-anim_save("2021/2021-03-23/unvotes.gif", p_anim,width = 480*2,height = 480)
+anim_save(here("2021", "2021-03-23", "unvotes.gif"),
+  p_anim,
+  width = 480 * 2,
+  height = 480
+)
